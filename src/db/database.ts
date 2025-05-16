@@ -8,13 +8,14 @@ const config = {
   type: 'mysql',
   host: `${process.env.DB_HOST}`,
   port: `${process.env.DB_PORT}`,
-  username: `${process.env.DB_USER}`,
+  username: `${process.env.DB_USERNAME}`,
   password: `${process.env.DB_PASSWORD}`,
-  database: `${process.env.DB_NAME}`,
+  database: `${process.env.DB_DATABASE}`,
   entities: [__dirname + `/../**/*.entity{.ts,.js}`],
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   autoLoadEntities: true,
   synchronize: false,
+  driver: require('mysql2'),  // Add this line to use mysql2 driver
 };
 export default registerAs('database', () => config);
 export const connectionSource = new DataSource(config as DataSourceOptions);

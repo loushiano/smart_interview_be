@@ -1,3 +1,4 @@
+// main.ts
 import { Logger, LogLevel, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -12,8 +13,15 @@ async function bootstrap() {
   const logger = new Logger('Main');
   const app = await NestFactory.create(AppModule, {
     logger: 'development' == process.env.NODE_ENV ? new Logger() : console,
-    cors: true,
   });
+  
+  // Enable CORS
+ app.enableCors({
+  origin: ['http://localhost:8081', 'http://localhost:3000'],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+});
+  
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -22,6 +30,6 @@ async function bootstrap() {
   );
 
   await app.listen(8080);
-  logger.log('okay we are live');
+  logger.log('Server is running on port 8080');
 }
 bootstrap();
