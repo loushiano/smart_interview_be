@@ -1,19 +1,23 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+// src/users/user.entity.ts
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ name: 'password' })
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
   password: string;
 
-  @Column({ name: 'lname', nullable: true })
-  lname: string;
-
-  @Column({ name: 'fname', nullable: true })
+  @Column({ nullable: true })
   fname: string;
 
-  @Column({ name: 'email' })
-  email: string;
+  @Column({ nullable: true })
+  lname: string;
+
+  @CreateDateColumn({ name: 'created_at', nullable: true })
+  createdAt: Date;
 }

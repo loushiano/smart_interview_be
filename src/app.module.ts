@@ -1,3 +1,4 @@
+// app.module.ts
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -8,6 +9,9 @@ import { JwtAuthGuard } from './authentication/jwt-auth.gard';
 import { UsersModule } from './users/users.module';
 import dbConfiguration from './db/database';
 import { AppService } from './app.service';
+import * as crypto from 'crypto';
+
+global.crypto = crypto as any;
 
 @Module({
   imports: [
@@ -15,9 +19,8 @@ import { AppService } from './app.service';
       isGlobal: true,
       envFilePath: ['.env.override', '.env', '.env.aws'],
       load: [dbConfiguration],
-    }), // .env.override takes priority when duplicates exist
+    }),
     TypeOrmModule.forRootAsync({
-      // TODO: Take out to ormconfig.js or config file
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         ...configService.get('database'),
